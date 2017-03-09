@@ -5,6 +5,7 @@ module ClosureTree
     extend ActiveSupport::Concern
 
     included do
+      before_validation :_ct_before_validation
       validate :_ct_validate
       before_save :_ct_before_save
       after_save :_ct_after_save
@@ -17,6 +18,12 @@ module ClosureTree
 
     def _ct_skip_sort_order_maintenance!
       @_ct_skip_sort_order_maintenance = true
+    end
+
+    def _ct_before_validation
+      if _ct.order_is_numeric? && eval("self.#{_ct.order_column} == nil")
+        eval("self.#{_ct.order_column} = #{self.model_name}.count")
+      end
     end
 
     def _ct_validate
