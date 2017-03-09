@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table "labels" do |t|
     t.string "name"
     t.string "type"
-    t.integer "column_whereby_ordering_is_inferred"
+    t.integer "column_whereby_ordering_is_inferred", null: false
     t.integer "mother_id"
   end
 
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string "metal_type"
     t.string "value"
     t.string "description"
-    t.integer "sort_order"
+    t.integer "sort_order", null: false
   end
 
   add_foreign_key(:metal, :metal, :column => 'parent_id')
