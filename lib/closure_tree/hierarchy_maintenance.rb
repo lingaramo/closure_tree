@@ -21,8 +21,8 @@ module ClosureTree
     end
 
     def _ct_before_validation
-      if _ct.order_is_numeric? && eval("self.#{_ct.order_column} == nil")
-        eval("self.#{_ct.order_column} = #{self.model_name}.count")
+      if _ct.order_is_numeric? && self.send(_ct.order_column.to_sym) == nil
+        self.send((_ct.order_column + "=").to_sym, self.class.count)
       end
     end
 
