@@ -5,7 +5,6 @@ module ClosureTree
     extend ActiveSupport::Concern
 
     included do
-      before_validation :_ct_before_validation
       validate :_ct_validate
       before_save :_ct_before_save
       after_save :_ct_after_save
@@ -20,12 +19,6 @@ module ClosureTree
       @_ct_skip_sort_order_maintenance = true
     end
 
-    def _ct_before_validation
-      if _ct.order_is_numeric? && self.send(_ct.order_column) == nil
-        self.send(_ct.order_column + "=", self.class.count)
-      end
-    end
-
     def _ct_validate
       if !@_ct_skip_cycle_detection &&
         !new_record? && # don't validate for cycles if we're a new record
@@ -37,6 +30,9 @@ module ClosureTree
     end
 
     def _ct_before_save
+      if _ct.order_is_numeric? && self.send(_ct.order_column) == nil
+        self.send(_ct.order_column + "=", self.class.count)
+      end
       @was_new_record = new_record?
       true # don't cancel the save
     end
