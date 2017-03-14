@@ -30,8 +30,8 @@ module ClosureTree
     end
 
     def _ct_before_save
-      if _ct.order_is_numeric? && self.send(_ct.order_column) == nil
-        self.send(_ct.order_column + "=", self.class.count)
+      if _ct.order_is_numeric? && self.order_value == nil
+        self.order_value = self.class.count
       end
       @was_new_record = new_record?
       true # don't cancel the save
